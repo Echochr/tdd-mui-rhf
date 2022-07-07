@@ -14,6 +14,7 @@ export default function ControlledTextField({ label, type, disabled, required, r
             rules={rules}
             render={({ field, fieldState: { error } }) => (
                 <TextField
+                    {...field}
                     variant="filled"
                     label={label}
                     type={type}
@@ -21,7 +22,6 @@ export default function ControlledTextField({ label, type, disabled, required, r
                     required={required}
                     error={!!error}
                     helperText={error ? error.message : null}
-                    {...field}
                 />
             )}
         />

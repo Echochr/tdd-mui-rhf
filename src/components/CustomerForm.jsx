@@ -1,20 +1,37 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Form from './Form';
+import Grid from '@mui/material/Grid';
+import AddressSection from './AddressSection';
 import TextField from './TextField';
+import Radio from './Radio';
 import Button from '@mui/material/Button';
 
 export default function CustomerForm({ onSubmit }) {
-    const methods = useForm({ mode: 'onBlur' });
+    const methods = useForm({
+        mode: 'onBlur',
+        defaultValues: {
+            address: [{}]
+        }
+    });
     const onCustomerFormSubmit = React.useCallback((form) => {
-        onSubmit(form);
+        const resultForm = {
+            ...form,
+            address: form.address.map(({ address }) => address)
+        }
+        onSubmit(resultForm);
     }, [onSubmit]);
+
+    const radioOptions = [
+        { name: 'HK', value: 'HK' },
+        { name: 'UK', value: 'UK' },
+    ]
 
     return (
         <Form methods={methods} onSubmit={onCustomerFormSubmit}>
-            <TextField name="firstName" label="First Name" required />
-            <TextField name="lastName" label="Last Name" required />
-            <TextField
+            <Grid><TextField name="firstName" label="First Name" required /></Grid>
+            <Grid><TextField name="lastName" label="Last Name" required /></Grid>
+            <Grid><TextField
                 name="age"
                 label="Age"
                 type="number"
@@ -22,8 +39,16 @@ export default function CustomerForm({ onSubmit }) {
                     min: { value: 18, message: 'Age must be at least 18' }
                 }}
                 required
-            />
-            <Button variant="contained" type="submit">Submit</Button>
+            /></Grid>
+            <Grid><Radio
+                label="Location"
+                name="location"
+                id="location"
+                options={radioOptions}
+                required
+            /></Grid>
+            <Grid><AddressSection /></Grid>
+            <Grid><Button variant="contained" type="submit">Submit</Button></Grid>
         </Form>
     );
 }
